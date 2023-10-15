@@ -12,11 +12,12 @@ public class CGameManager : CScriptableSingletone<CGameManager>
 
     //adding on Runtime
     public CPlayer m_Player = null;
+    public C_PC_Hosting m_Network = null;
 
     //adding on Editor
     [Header("---scriptableDatas---")]
     public CCSVDictionary m_Dictionary = null;
-
+    
 
 
 

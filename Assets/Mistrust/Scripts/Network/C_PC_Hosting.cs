@@ -40,6 +40,11 @@ public class C_PC_Hosting : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        CGameManager.Instance.m_Network = this;
+    }
+
     private void Start()
     {
         DontDestroyOnLoad(this);
@@ -166,13 +171,14 @@ public class C_PC_Hosting : MonoBehaviour
     }
 
     //폰으로 정보 보냄
-    void SendToMobile(string _data) 
+    public void SendToMobile(string _data) 
     {
         try
         {
             StreamWriter writer = new StreamWriter(mobile.tcp.GetStream());
             writer.WriteLine(_data);
             writer.Flush();
+            Debug.Log("전송함" + _data);
 
         }
         catch (Exception e)
@@ -182,7 +188,7 @@ public class C_PC_Hosting : MonoBehaviour
     }
 
     //모바일로 부터 받은 데이터 처리
-    void ReciveToMobile(string _data) 
+    public void ReciveToMobile(string _data) 
     {
         Debug.Log("recive from mobile " + _data);
         

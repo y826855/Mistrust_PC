@@ -40,6 +40,13 @@ public class CUtility
     }
 
 
+    [System.Serializable]
+    public class CLock 
+    {
+        public string m_Password = "";
+        public bool m_IsOpened = false;    
+    }
+
     /////////////////////////////////////////////////CSV DATA/////////////////////////////////////////////////
     [System.Serializable]
     public class CData_CSV 
