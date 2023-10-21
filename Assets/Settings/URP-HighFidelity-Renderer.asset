@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
-    renderersAfterOpaqueAndSky: []
+    renderersAfterOpaqueAndSky:
+    - Yetman.PostProcess.EdgeDetectionEffectRenderer, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
     renderersBeforePostProcess: []
     renderersAfterPostProcess: []
 --- !u!114 &-1878332245247344467
@@ -58,8 +60,7 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: -1878332245247344467}
   - {fileID: -3544923908575174776}
-  - {fileID: 2002067842646935091}
-  m_RendererFeatureMap: adc0de57c6d2eee5885f96a97ce6cdce3306347118c6c81b
+  m_RendererFeatureMap: adc0de57c6d2eee5885f96a97ce6cdce
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -99,18 +100,3 @@ MonoBehaviour:
   m_ClusteredRendering: 0
   m_TileSize: 32
   m_IntermediateTextureMode: 0
---- !u!114 &2002067842646935091
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96dab975e69883249a56554e791c4fd0, type: 3}
-  m_Name: ButoRenderFeature
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  settings:
-    renderPassEvent: 450

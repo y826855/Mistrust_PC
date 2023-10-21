@@ -173,6 +173,8 @@ public class C_PC_Hosting : MonoBehaviour
     //폰으로 정보 보냄
     public void SendToMobile(string _data) 
     {
+        if (mobile == null) return;
+
         try
         {
             StreamWriter writer = new StreamWriter(mobile.tcp.GetStream());

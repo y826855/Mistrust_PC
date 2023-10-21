@@ -55,7 +55,7 @@ public class C_PC_Client : MonoBehaviour
 		}
 		catch (Exception e)
 		{
-			Debug.Log("참가 실패");
+			Debug.Log("참가 실패" + e);
 			//Chat.instance.ShowMessage($"소켓에러 : {e.Message}");
 		}
 	}

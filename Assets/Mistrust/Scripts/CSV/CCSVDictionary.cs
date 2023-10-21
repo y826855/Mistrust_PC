@@ -7,21 +7,23 @@ public class CCSVDictionary : MonoBehaviour
     public SerializeDictionary<uint, ScriptableObject> m_AllScriptables
         = new SerializeDictionary<uint, ScriptableObject>();
 
-
-
+    
+    //public SerializeDictionary<Vector2Int, bool> m_Interactions =
+    //    new SerializeDictionary<Vector2Int, bool>();
+    [System.Serializable]
+    public class CInteraction 
+    { public List<bool> m_Acts = new List<bool>(); }
+    public SerializeDictionary<CEventCollection.EChapter, CInteraction> m_Interactions 
+        = new SerializeDictionary<CEventCollection.EChapter, CInteraction>();
 
 
     public enum EDataID
     {
         NONE = -1,
-        SKILL = 501,
-        ENEMY = 601,
-        DROPTABLE = 1501,
-        ITEM = 3001,
-        WEAPON = 5000,
+
     }
 
-    public uint m_EndOfSkill = 0;
+    //public uint m_EndOfSkill = 0;
 
     //타입에 따른 데이터 모두 반환함
     public List<T> GetAllDataOfType<T>() where T : ScriptableObject 

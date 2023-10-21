@@ -43,8 +43,9 @@ public class CUtility
     [System.Serializable]
     public class CLock 
     {
+        public string m_ID = "";
         public string m_Password = "";
-        public bool m_IsOpened = false;    
+        public bool m_IsSolved = false;    
     }
 
     /////////////////////////////////////////////////CSV DATA/////////////////////////////////////////////////
@@ -77,7 +78,9 @@ public class CUtility
     }
     /////////////////////////////////////////////////CSV DATA/////////////////////////////////////////////////
 
-    /////////////////////////////////////////////////MAP DATA/////////////////////////////////////////////////
+    
+
+
 }
 
 
@@ -160,6 +163,8 @@ public class CEdit_SelectParent : EditorWindow
         Selection.objects = childs.ToArray();
         childs.Clear();
     }
+
+
 }
 
 //read only//

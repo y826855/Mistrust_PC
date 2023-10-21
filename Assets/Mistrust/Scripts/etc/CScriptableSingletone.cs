@@ -9,8 +9,8 @@ using UnityEditor;
 public abstract class CScriptableSingletone<T> : ScriptableObject where T : ScriptableObject
 {
     //부모 폴더 위치
-    //static public string m_FolderPath = "Assets/Resources/";
-    static public string m_FolderPath = CUtility.m_FolderPath;
+    static public string m_FolderPath = "Assets/Resources/";
+    //static public string m_FolderPath = CUtility.m_FolderPath;
 
     //존재할 폴더
     static public string m_AssetFolder = "Singletone";
