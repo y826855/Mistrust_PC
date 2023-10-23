@@ -48,4 +48,6 @@ MonoBehaviour:
     keys: 
     values: []
   m_Interactions:
-    keys: 
+    keys: 00000000
+    values:
+    - m_Acts: 0100

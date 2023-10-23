@@ -47,6 +47,7 @@ public class C_PC_Hosting : MonoBehaviour
 
     private void Start()
     {
+        CGameManager.Instance.m_Dictionary.LoadDatas();
         DontDestroyOnLoad(this);
         ServerCreate();
     }
@@ -193,9 +194,25 @@ public class C_PC_Hosting : MonoBehaviour
     public void ReciveToMobile(string _data) 
     {
         Debug.Log("recive from mobile " + _data);
-        
         //if (_data == "DoorOpen") m_Door.DoorOpen();
-        SendToMobile("Recived");
+        //SendToMobile("Recived");
+
+
+
+        char[] delimiters = { '+' };
+        string[] packit = _data.Split(delimiters);
+
+        switch ((CUtility.ESendToPC)int.Parse(packit[0]))
+        {
+            case CUtility.ESendToPC.INTERACTION:
+                CGameManager.Instance.m_Player.ReciveData(packit[1]);
+                break;
+
+            default:
+                CGameManager.Instance.m_Player.ReciveData("");
+                break;
+        }
+
     }
 
     void FunctionExecuter(string _data)
@@ -207,6 +224,7 @@ public class C_PC_Hosting : MonoBehaviour
     private void OnApplicationQuit()
     {
         Debug.Log("QUIT");
+        CGameManager.Instance.Save();
         server.Stop();
     }
 }

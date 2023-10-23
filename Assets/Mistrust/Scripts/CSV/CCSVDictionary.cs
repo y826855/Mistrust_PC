@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class CCSVDictionary : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class CCSVDictionary : MonoBehaviour
     
     //public SerializeDictionary<Vector2Int, bool> m_Interactions =
     //    new SerializeDictionary<Vector2Int, bool>();
+
+
+    //상호작용 저장용
     [System.Serializable]
     public class CInteraction 
     { public List<bool> m_Acts = new List<bool>(); }
@@ -20,7 +24,6 @@ public class CCSVDictionary : MonoBehaviour
     public enum EDataID
     {
         NONE = -1,
-
     }
 
     //public uint m_EndOfSkill = 0;
@@ -64,5 +67,34 @@ public class CCSVDictionary : MonoBehaviour
         //else return typeof(CUtility.CData_Weapon);
 
         return null;
+    }
+
+    //불러오기
+    public void LoadDatas() 
+    {
+        //JsonUtility.FromJson
+        string path = Application.dataPath + "/Data/InteractionData.txt";
+
+        if (File.Exists(path) == true)
+        {
+            string data = File.ReadAllText(path);
+            m_Interactions = JsonUtility.FromJson
+                <SerializeDictionary<CEventCollection.EChapter, CInteraction>>(data);
+            Debug.Log(data);
+        }
+    }
+
+    //저장
+    public void SaveDatas() 
+    {
+        string path = Application.dataPath + "/Data";
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+
+        string data = JsonUtility.ToJson(m_Interactions);
+        Debug.Log(data);
+        File.WriteAllText(path + "/InteractionData.txt", data);
     }
 }

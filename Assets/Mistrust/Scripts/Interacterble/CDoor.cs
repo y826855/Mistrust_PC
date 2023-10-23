@@ -34,18 +34,27 @@ public class CDoor : CInteractable
         {
             m_Outline.enabled = false;
 
-            if (m_IsLocked == true && m_Type == EInteractionType.DOOR_LOCKED)
+            //if (m_IsLocked == true && m_Type == EInteractionType.DOOR_LOCKED)
+            if (m_Lock.m_IsSolved == false && m_Type == EInteractionType.DOOR_LOCKED)
             {
                 //TODO : 폰으로 신호 보낼때 흠..
-                
-#if UNITY_ANDROID
+                Debug.Log("문이 잠겨있어요");
+
+//#if UNITY_ANDROID
                 string packit = JsonUtility.ToJson(m_Lock);
-                packit = string.Format("{0}+{1}", "Lock", packit);
+                packit = string.Format("{0}+{1}", 
+                    (int)CUtility.ESendToMobile.DOOR_LOCK, packit);
                 CGameManager.Instance.m_Network.SendToMobile(packit);
-#endif
+//#endif
             }
             else { MoveDoor(); }
         }
+    }
+
+    public override void Interaction_ActionDone()
+    {
+        MoveDoor();
+        m_Lock.m_IsSolved = true;
     }
 
     //잠금해제

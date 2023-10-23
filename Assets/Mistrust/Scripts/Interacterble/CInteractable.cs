@@ -23,6 +23,11 @@ public class CInteractable : MonoBehaviour
         if (m_bCanWork == true) { }
     }
 
+    public virtual void Interaction_ActionDone() 
+    {
+    
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("IN PLAYER");

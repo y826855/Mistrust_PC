@@ -7,6 +7,7 @@ using UnityEngine.Animations.Rigging;
 public class CPlayer : CStateMachine
 {
     public CInteractable m_NearInterObj = null;
+    CInteractable currInterObj = null;
 
     public Transform m_Model = null;
     [SerializeField] Transform m_Cursor = null;
@@ -169,6 +170,11 @@ public class CPlayer : CStateMachine
                 if (canAct == false)
                 {
                     m_Animator.SetTrigger("CancelAction");
+                    
+                    string packit = "";
+                    packit = string.Format("{0}+{1}",
+                        (int)CUtility.ESendToMobile.DOOR_LOCK, packit);
+
                     if (coInteractionIK != null) { StopCoroutine(coInteractionIK); }
                     coInteractionIK = StartCoroutine(CoInteractionIK(false, 0.1f));
                     canAct = true;
@@ -203,6 +209,7 @@ public class CPlayer : CStateMachine
             if (m_NearInterObj != null &&
                 Physics.Raycast(ray, out hit, 100f,m_InteractionMask)) 
             {
+                currInterObj = m_NearInterObj;
                 Interaction();
             }
             
@@ -228,6 +235,7 @@ public class CPlayer : CStateMachine
 
                 case CInteractable.EInteractionType.DOOR_LOCKED:
                     m_Agent.destination = m_NearInterObj.m_Handle.position;
+                    coInteractionIK = StartCoroutine(CoInteractionIK(true, 1f));
                     m_Animator.SetTrigger("DoorClosed");
                     canAct = false;
                     break;
@@ -249,23 +257,25 @@ public class CPlayer : CStateMachine
     Coroutine coInteractionIK = null;
     IEnumerator CoInteractionIK(bool _toggle, float _duration)
     {
-        Debug.Log("IK start");
+        //Debug.Log("IK start");
         if (m_NearInterObj != null)
         {
             Vector3 _targetPos = m_NearInterObj.m_Handle.position;
             float t = 1f;
 
-            if (_toggle == true) yield return StartCoroutine(LookAt(_targetPos, 0.2f));
+            //StartCoroutine(LookAt(_targetPos, 0.2f));
+            //if (_toggle == true) yield return StartCoroutine(LookAt(_targetPos, 0.2f));
             while (t > 0)
             {
                 t -= Time.deltaTime / _duration;
 
-                Debug.Log("IK MOVED");
+                //Debug.Log("IK MOVED");
 
                 if (_toggle == true)
                 {
                     m_InterationWeightTarget.position = _targetPos;
                     m_Rig_Interaction.weight = 1f - t;
+                    LookAt(_targetPos, t);
                 }
                 else m_Rig_Interaction.weight = t;
 
@@ -275,18 +285,23 @@ public class CPlayer : CStateMachine
     }
 
     //지정된 방향 쳐다보기
-    IEnumerator LookAt(Vector3 _target, float _duration) 
+    IEnumerator CoLookAt(Vector3 _target, float _duration) 
     {
-        _target.y = this.transform.position.y;
-        Vector3 look = _target - this.transform.position;
         float t = 1f;
         while (t > 0)
         {
             t -= Time.deltaTime / _duration;
-            this.transform.forward = 
-                Vector3.Lerp(this.transform.forward, look, 1f - t);
+            LookAt(_target, t);
             yield return null;
         }
+    }
+
+    void LookAt(Vector3 _target, float _weight) 
+    {
+        _target.y = this.transform.position.y;
+        Vector3 look = _target - this.transform.position;
+        this.transform.forward =
+            Vector3.Lerp(this.transform.forward, look, 1f - _weight);
     }
 
 
@@ -308,4 +323,21 @@ public class CPlayer : CStateMachine
         }
         coInteractionIK = StartCoroutine(CoInteractionIK(false, 0.1f));
     }
+
+    public void Anim_Interaction_Phone()
+    {
+        //canAct = true;
+        m_NearInterObj.Interaction();
+        coInteractionIK = StartCoroutine(CoInteractionIK(false, 0.1f));
+    }
+
+
+    public void ReciveData(string _data) 
+    {
+        Debug.Log(_data);
+
+        if(bool.Parse(_data) == true)
+            m_NearInterObj.Interaction_ActionDone();
+    }
+
 }

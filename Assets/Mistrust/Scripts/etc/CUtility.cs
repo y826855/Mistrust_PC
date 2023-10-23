@@ -8,6 +8,22 @@ using UnityEditor;
 
 public class CUtility
 {
+    //
+    public enum ESendToMobile
+    {
+        CLOSE_APP = -1,
+        LOCK = 0,
+        DOOR_LOCK,
+
+    }
+
+    public enum ESendToPC
+    {
+        INTERACTION = 0,
+
+    }
+
+
     public static string m_FolderPath = "Assets/Mistrust/";
     public static string m_TimeFormat = "yyyy-MM-dd HH:mm:ss";
     //public static IEnumerator Eof = WaitForEndOfFrame();

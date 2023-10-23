@@ -20,7 +20,7 @@ public class Editor_CEventCollection : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        EditorUtility.SetDirty(selected);
+        EditorUtility.SetDirty(CGameManager.Instance.m_Dictionary);
         if (GUILayout.Button("GET ALL LOCKS IN SCENE") == true)
         {
             //var doors = selected.ParentObj.GetComponentsInChildren<CDoor>();

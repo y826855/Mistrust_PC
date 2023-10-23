@@ -46,7 +46,7 @@ public class CGameManager : CScriptableSingletone<CGameManager>
     public void Save() 
     {
         Debug.Log("QUIT");
-
+        m_Dictionary.SaveDatas();
     }
 
     
