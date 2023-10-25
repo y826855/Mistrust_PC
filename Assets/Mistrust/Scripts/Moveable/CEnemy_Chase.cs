@@ -178,8 +178,8 @@ public class CEnemy_Chase : CStateMachine
             //Debug.Log(dist);
         }
 
-        Debug.Log(nearIdx);
-        Debug.Log(near);
+        //Debug.Log(nearIdx);
+        //Debug.Log(near);
         return nearIdx;
     }
     //////////////////////////////////////////////////

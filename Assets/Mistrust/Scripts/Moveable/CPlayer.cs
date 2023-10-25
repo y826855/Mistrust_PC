@@ -148,7 +148,7 @@ public class CPlayer : CStateMachine
     public bool CheckMouseInput()
     {
 
-        if (Input.GetMouseButton(0) && !Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetMouseButton(1) && !Input.GetKey(KeyCode.LeftShift))
         {
             //레이케스트 하여 마우스 포인터로 움직임
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -171,9 +171,10 @@ public class CPlayer : CStateMachine
                 {
                     m_Animator.SetTrigger("CancelAction");
                     
-                    string packit = "";
+                    string packit = "none";
                     packit = string.Format("{0}+{1}",
-                        (int)CUtility.ESendToMobile.DOOR_LOCK, packit);
+                        (int)CUtility.ESendToMobile.CLOSE_APP, packit);
+                    CGameManager.Instance.m_Network.SendToMobile(packit);
 
                     if (coInteractionIK != null) { StopCoroutine(coInteractionIK); }
                     coInteractionIK = StartCoroutine(CoInteractionIK(false, 0.1f));
@@ -196,9 +197,9 @@ public class CPlayer : CStateMachine
     public void Update()
     {
 
-        if (canAct == true && Input.GetMouseButtonDown(1)) 
+        if (canAct == true && Input.GetMouseButtonDown(0)) 
         {
-            Debug.Log("MOUSE RIGHT");
+            m_Animator.ResetTrigger("CancelAction");
 
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -327,7 +328,9 @@ public class CPlayer : CStateMachine
     public void Anim_Interaction_Phone()
     {
         //canAct = true;
-        m_NearInterObj.Interaction();
+        Debug.Log("PHONE ");
+        if (m_NearInterObj != null && canAct == false)
+        { m_NearInterObj.Interaction(); }
         coInteractionIK = StartCoroutine(CoInteractionIK(false, 0.1f));
     }
 
@@ -338,6 +341,8 @@ public class CPlayer : CStateMachine
 
         if(bool.Parse(_data) == true)
             m_NearInterObj.Interaction_ActionDone();
+
+        m_Animator.SetTrigger("CancelAction");
     }
 
 }

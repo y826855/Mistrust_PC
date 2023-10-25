@@ -6,6 +6,7 @@ public class CDoor : CInteractable
 {
 
     bool isFront = false;   //열리는 방향 앞뒤 ?
+    public bool IsDoorLeftHandle = false;
     public bool m_IsLocked = false; //잠겨있나?
     public bool m_bIsOpened = false; //문이 열려있어서 닫아야하나?
     public bool m_LockingEverytime = false; //닫힐때마다 문이 잠길것인가?
@@ -15,7 +16,7 @@ public class CDoor : CInteractable
     public Transform m_DoorHingi = null;
     [SerializeField] Collider m_ColDoor = null;
     [SerializeField] NavMeshSourceTag m_NavMeshSourceTag = null;
-    public float m_OpenSpeed = 3f;
+    public float m_OpenDuration = 1f;
 
     [Header("------------------------")]
     public CUtility.CLock m_Lock = new CUtility.CLock();
@@ -70,11 +71,14 @@ public class CDoor : CInteractable
     void MoveDoor() 
     {
         Transform player = CGameManager.Instance.m_Player.transform;
-        float z = this.transform.InverseTransformPoint(player.position).z;
+        //float z = m_DoorHingi.InverseTransformPoint(player.position).z;
+        float z = m_DoorHingi.InverseTransformPoint(player.position).x;
 
-        //front = 1
-        float isfront = z > 0 ? 1f : -1f;
-
+        Debug.Log(z);
+        //front = -1
+        float isfront = z > 0 ? -1f : 1f;
+        //왼쪽 손잡이문 이면 반전
+        if (IsDoorLeftHandle == true) isfront *= -1;
         //닫기
         if (m_bIsOpened == true)
         {
@@ -97,17 +101,18 @@ public class CDoor : CInteractable
         m_ColDoor.enabled = false;
         m_NavMeshSourceTag.enabled = false;
 
+        var rot = m_DoorHingi.transform.localRotation;
         float t = 0;
         while (t < 1f) 
         {
-            t += Time.deltaTime / m_OpenSpeed;
-            m_DoorHingi.transform.localRotation = 
-                Quaternion.Lerp(m_DoorHingi.transform.localRotation,
-                Quaternion.Euler(_eulerAngle),t);
+            t += Time.deltaTime / m_OpenDuration;
+            m_DoorHingi.transform.localRotation =
+                Quaternion.Lerp(rot, Quaternion.Euler(_eulerAngle), t);
             yield return null;    
         }
-
         m_DoorHingi.transform.localRotation = Quaternion.Euler(_eulerAngle);
+
+        yield return CUtility.m_WFS_DOT1;
         m_ColDoor.enabled = true;
         m_NavMeshSourceTag.enabled = true;
         m_bCanWork = true;

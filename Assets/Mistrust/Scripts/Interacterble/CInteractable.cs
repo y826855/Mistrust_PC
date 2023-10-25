@@ -30,7 +30,6 @@ public class CInteractable : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("IN PLAYER");
         m_Outline.enabled = true;
 
         if (m_bCanWork == true)

@@ -13,7 +13,6 @@ public class CDynamicLight : MonoBehaviour
     [SerializeField] bool toggleLight = true;
     [SerializeField] float m_RecoverDelay = 1f;
     public System.Action<bool> m_FuncToggleCB = null;
-
     
 
     private void Start()

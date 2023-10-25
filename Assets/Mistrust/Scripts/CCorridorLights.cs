@@ -8,14 +8,15 @@ using UnityEditor;
 
 public class CCorridorLights : MonoBehaviour
 {
-    [SerializeField] float m_LightArea = 3f;
+    [SerializeField] float m_LightArea_X = 3f;
+    [SerializeField] float m_LightArea_Z = 3f;
     public Light m_Light = null;
     public List<CDynamicLight> m_Lights = new List<CDynamicLight>();
     
     float DefaultIntensity = 0f;
     float IntensityWeight = 0f;
 
-    private void Start()
+    private void Awake()
     {
         //주변 조명 개수 받아두고 그에 따른 조명 켜고 꺼짐의 정도
         DefaultIntensity = m_Light.intensity;
@@ -54,10 +55,10 @@ public class CCorridorLights : MonoBehaviour
                 it.m_Lights.AddRange(it.GetComponentsInChildren<CDynamicLight>());
 
                 Vector3 pos = it.transform.position;
-                it.m_Lights[0].transform.position = new Vector3(pos.x + it.m_LightArea, pos.y, pos.z + it.m_LightArea);
-                it.m_Lights[1].transform.position = new Vector3(pos.x - it.m_LightArea, pos.y, pos.z + it.m_LightArea);
-                it.m_Lights[2].transform.position = new Vector3(pos.x + it.m_LightArea, pos.y, pos.z - it.m_LightArea);
-                it.m_Lights[3].transform.position = new Vector3(pos.x - it.m_LightArea, pos.y, pos.z - it.m_LightArea);
+                it.m_Lights[0].transform.position = new Vector3(pos.x + it.m_LightArea_X, pos.y, pos.z + it.m_LightArea_Z);
+                it.m_Lights[1].transform.position = new Vector3(pos.x - it.m_LightArea_X, pos.y, pos.z + it.m_LightArea_Z);
+                it.m_Lights[2].transform.position = new Vector3(pos.x + it.m_LightArea_X, pos.y, pos.z - it.m_LightArea_Z);
+                it.m_Lights[3].transform.position = new Vector3(pos.x - it.m_LightArea_X, pos.y, pos.z - it.m_LightArea_Z);
             }
         }
     }

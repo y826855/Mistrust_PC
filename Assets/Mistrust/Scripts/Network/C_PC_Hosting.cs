@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+
+using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Net;
 using System.IO;
@@ -19,8 +21,13 @@ public class C_PC_Hosting : MonoBehaviour
 
     TcpListener server;
     bool serverStarted = false;
-    bool isMobileConnected = false;
+    [SerializeField]bool isMobileConnected = false;
     public TextMeshProUGUI m_TMP_CurrIP = null;
+
+    public GameObject m_ShowIP = null;
+
+    [SerializeField] bool isWaitForClient = false;
+    [SerializeField] bool IsPause = false;
 
 
     public string Local_IP
@@ -50,6 +57,8 @@ public class C_PC_Hosting : MonoBehaviour
         CGameManager.Instance.m_Dictionary.LoadDatas();
         DontDestroyOnLoad(this);
         ServerCreate();
+
+        WaitForClient();
     }
 
     //서버 생성
@@ -78,15 +87,40 @@ public class C_PC_Hosting : MonoBehaviour
         }
     }
 
+
     void Update()
     {
-        //서버가 시작됬거나 모바일이 들어왔는지 체크
-        if (serverStarted == false || isMobileConnected == false) return;
-
-        //여전히 연결중인가?
-        if (!IsConnected(mobile.tcp))
+        if (Input.GetKeyDown(KeyCode.P))
         {
+            isMobileConnected = !isMobileConnected;
+            WaitForClient();
+        }
 
+        if (isWaitForClient == true)
+        {
+            //서버가 시작됬거나 모바일이 들어왔는지 체크
+            if (serverStarted == false || isMobileConnected == false)
+            {
+                if (IsPause == false) WaitForClient();
+                return;
+            }
+            if (IsPause == true)
+            {
+                if (IsPause == true) WaitForClient();
+            }
+        }
+        else
+        {   //그냥 실시간 모바일 들어옴 체크
+            if (serverStarted == false || isMobileConnected == false)
+                return;
+        }
+
+        
+        //연결 끊김 체크
+        if (IsConnected(mobile.tcp) == false)
+        {
+            isMobileConnected = false;
+            if (IsPause == false) WaitForClient();
         }
         else 
         {
@@ -141,7 +175,10 @@ public class C_PC_Hosting : MonoBehaviour
             if (c != null && c.Client != null && c.Client.Connected)
             {
                 if (c.Client.Poll(0, SelectMode.SelectRead))
+                {
+                    Debug.Log("CONNECT");
                     return !(c.Client.Receive(new byte[1], SocketFlags.Peek) == 0);
+                }
 
                 return true;
             }
@@ -150,6 +187,8 @@ public class C_PC_Hosting : MonoBehaviour
         }
         catch
         {
+            Debug.Log("error");
+
             return false;
         }
     }
@@ -165,6 +204,8 @@ public class C_PC_Hosting : MonoBehaviour
     //모바일 클라이언트 연결
     void AcceptTcpClient(IAsyncResult ar)
     {
+        Debug.Log("connect");
+
         TcpListener listener = (TcpListener)ar.AsyncState;
         mobile = new ServerClient(listener.EndAcceptTcpClient(ar));
         StartListening();
@@ -227,7 +268,30 @@ public class C_PC_Hosting : MonoBehaviour
         CGameManager.Instance.Save();
         server.Stop();
     }
+
+    //연결 끊기면 멈추게함
+    public void WaitForClient() 
+    {
+        if (isWaitForClient == false) return;
+
+
+        Debug.Log("work plz");
+
+        if (isMobileConnected == false)
+        {
+            Time.timeScale = 0;
+            m_ShowIP.gameObject.SetActive(true);
+            IsPause = true;
+        }
+        else 
+        {
+            Time.timeScale = 1;
+            m_ShowIP.gameObject.SetActive(false);
+            IsPause = false;
+        }
+    }
 }
+
 
 
 
