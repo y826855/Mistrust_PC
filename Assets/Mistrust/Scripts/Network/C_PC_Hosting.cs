@@ -69,7 +69,10 @@ public class C_PC_Hosting : MonoBehaviour
             //TODO : 포트는 선택하게 할까?
             //int port = PortInput.text == "" ? 7777 : int.Parse(PortInput.text);
             int port = 7777;
-            server = new TcpListener(IPAddress.Any, port);
+            server = new TcpListener(IPAddress.Parse(Local_IP), port);
+            
+            //server = new TcpListener(IPAddress.Any, port);
+            Debug.Log(Local_IP);
             server.Start();
 
             StartListening();

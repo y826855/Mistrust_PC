@@ -74,7 +74,7 @@ public class CDoor : CInteractable
         //float z = m_DoorHingi.InverseTransformPoint(player.position).z;
         float z = m_DoorHingi.InverseTransformPoint(player.position).x;
 
-        Debug.Log(z);
+        //Debug.Log(z);
         //front = -1
         float isfront = z > 0 ? -1f : 1f;
         //왼쪽 손잡이문 이면 반전
